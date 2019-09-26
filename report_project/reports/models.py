@@ -5,8 +5,8 @@ class Event(models.Model):
     dmeva_code  = models.CharField(max_length=20) 
     dmeva_fecha = models.DateField()
     grafico     = models.ImageField()
-    mapa        = models.ImageField()
-    # mapa        = models.PolygonField()
+    mapa        = models.ImageField(upload_to='mapa/')
+    # mapa        = models.PolygonField(upload_to='mapa/')
     def __str__(self): 
         return self.dmeva_code  
 
@@ -28,7 +28,7 @@ class SatImage(models.Model):
     banda       = models.CharField(max_length=50)
     fecha       = models.DateField()
     antes       = models.BooleanField()
-    image       = models.ImageField()  
+    image       = models.ImageField(upload_to='satimages')  
     def __str__(self): 
         return str(self.id)  
 
