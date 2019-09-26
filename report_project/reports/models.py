@@ -8,12 +8,13 @@ class Event(models.Model):
     mapa        = models.ImageField()
     # mapa        = models.PolygonField()
     def __str__(self): 
-        return self.event_code  
+        return self.dmeva_code  
 
 class Informe(models.Model):
+    event       = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
+    satimage    = models.ManyToManyField('SatImage')
     informe_code= models.CharField(max_length=20)
     title       = models.CharField(max_length=200)
-    event       = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
     fecha       = models.DateField()
     def __str__(self): 
         return self.informe_code  
@@ -29,7 +30,7 @@ class SatImage(models.Model):
     antes       = models.BooleanField()
     image       = models.ImageField()  
     def __str__(self): 
-        return self.id 
+        return str(self.id)  
 
 class Area(models.Model): 
     event       = models.ForeignKey(Event, on_delete=models.CASCADE)
