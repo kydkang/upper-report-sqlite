@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="">
+        <p>{{ object.informe_code }}</p>
+        <p>{{ object.event.event_code}}</p>
+        <p>{{ object.fecha }}</p>
+    </div>
+
+    <p> <a href="{% url 'informe_update' object.pk %}">+ Update Informe</a> </p>
+    <p> <a href="{% url 'informe_delete' object.pk %}">+ Delete Blog Post</a> </p>
+
+{% endblock content %}

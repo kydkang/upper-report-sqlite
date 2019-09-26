@@ -1,0 +1,25 @@
+{% load static %}
+<html>
+
+<head>
+    <title>SNGRE</title>
+    <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
+</head>
+
+<body>
+    <header>
+        <h1><a href="/">A Header base.html</a></h1>
+    </header>
+    <div class="container">
+
+        <div class="">
+                <a href="{% url 'informe_create' %}">+ New Informe</a> 
+        </div>              
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+
+</html>

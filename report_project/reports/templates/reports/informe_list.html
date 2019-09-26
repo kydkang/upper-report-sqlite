@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h3>initial List</h3>
+    <ul>
+        {% for informe in object_list %}
+            <li><a href="{% url 'informe_detail' pk=informe.pk %}"> {{ informe.informe_code }} </a> </li>
+            <li>{{ informe.fecha }}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
