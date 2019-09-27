@@ -21,4 +21,11 @@ class InformeForm(forms.ModelForm):
         elif self.instance.pk:    # if there is an instance in the form
             self.fields['satimage'].queryset = self.instance.event.satimage_set.order_by('fecha')
 
+    # def save(self): 
+    #     obj = super(InformeForm, self).save(False)
+    #     obj.satimage = self.fields['satimage'].choice_value
+    #     obj.save()
+    #     return obj
+
+
 
