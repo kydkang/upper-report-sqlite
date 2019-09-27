@@ -4,7 +4,7 @@ from django.urls import reverse
 class Event(models.Model): 
     dmeva_code  = models.CharField(max_length=20) 
     dmeva_fecha = models.DateField()
-    grafico     = models.ImageField()
+    grafico     = models.ImageField(upload_to='grafico/')
     mapa        = models.ImageField(upload_to='mapa/')
     # mapa        = models.PolygonField(upload_to='mapa/')
     def __str__(self): 
@@ -32,9 +32,9 @@ class SatImage(models.Model):
     def __str__(self): 
         return str(self.id)  
 
-class Area(models.Model): 
+class Area(models.Model):   
     event       = models.ForeignKey(Event, on_delete=models.CASCADE)
-    distrito    = models.CharField(max_length=6)  
+    distrito    = models.OneToOneField('Distrito', on_delete=models.CASCADE)  
     superficie  = models.DecimalField(max_digits=8, decimal_places=2)
     hectarea    = models.DecimalField(max_digits=8, decimal_places=2)
     percentage  = models.DecimalField(max_digits=5, decimal_places=2)
@@ -42,7 +42,7 @@ class Area(models.Model):
         return str(self.id)
 
 class Distrito(models.Model):  
-    distritoID  = models.CharField(max_length=6) 
+    distritoID  = models.CharField(max_length=6, primary_key=True) 
     province    = models.CharField(max_length=50)
     canton      = models.CharField(max_length=50)
     parroquia   = models.CharField(max_length=50)

@@ -8,6 +8,11 @@
         <p> <img src="{{ object.satimage1.image.url }}" alt=""> </p>
 
 
+        {% for area in area_set %}
+           {{ area }}
+           <p> {{ area.superficie }} </p>
+        {% endfor %} 
+
     </div>
 
     <p> <a href="{% url 'informe_update' object.pk %}">+ Update Informe</a> </p>

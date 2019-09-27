@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Informe
+from .models import Informe, Area
 from .forms import InformeForm 
 
 class InformeListView(ListView):
@@ -12,40 +12,53 @@ class InformeDetailView(DetailView):
     model = Informe    ## Or, queryset = Informe.objects.all()
     template_name = 'reports/informe_detail.html' 
 
+    from django.core import serializers
+    def get_initial(self):
+        # initial = super(InformeCreateView, self).get_initial(**kwargs)
+        area_set = serializers.deserialize("json", response.session('area_set'))
+        return {
+            'area_set':area_set,
+        }
+
 from django.http import HttpResponseRedirect
 class InformeCreateView(CreateView): 
     form_class = InformeForm 
     template_name = 'reports/informe_form.html'
 
-    # def get_context_data(self,  **kwargs):
-    #     context = super(InformeCreateView, self).get_context_data(**kwargs)
-    #     context['satimage_pk'] = request.POST.get('satimage1')
-    #     return context 
-
-    # def form_valid(self, form):
-    # #     self.object = form.save(commit=False)
-    # #     self.object.user = self.fields['satimage1']
-    # #     self.object.save()
-    # #     return HttpResponseRedirect(self.get_success_url())
-    #     satimage_selected = request.POST['satimage1']  
-    #     # satimage_selected_object = SatImage.objects.get(pk=satimage_selected)     # informe.id
-    #     request.session['satimage1'] = satimage_selected 
-    #     return HttpResponseRedirect(self.get_success_url())
-    #     # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
-
     def post(self, request, *args, **kwargs):
         form = InformeForm(request.POST)
         if form.is_valid():
             informe = form.save(commit=False)
+
+            # gets the satimage1
             satimage1_id = request.POST.get('satimage1')
             informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
+
+            # gets the list of areas and set it in session 
+            from django.core import serializers
+            event_id = request.POST.get('event')
+            area_set = Area.objects.filter(event=event_id) 
+            area_serialized = serializers.serialize('json', area_set)
+            request.session['area_set'] = area_serialized 
+
             informe.save()
             return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+            # return render(request,'reports/informe_detail', {'pk': informe.pk, 'dummy': 'dummy' } )
+
+        #  pass by session 
+        #     request.session['bar'] = 'FooBar'
+        #     return redirect('app:view')
+        # in template, use it by: 
+        # {{ request.session.bar }}
 
 
-    # def get(self, request, *args, **kwargs):
-    #     context = {'form': InformeForm()}
-    #     return render(request, 'reports/informe_form.html', context)
+    # def get_context_data(self, **kwargs):
+    #     context = super(InformeCreateView, self).get_context_data(**kwargs)
+    #     context['areaset'] = Area.objects.filter(event=event.pk)
+    #     return context
+
+
+
 
 
 class InformeUpdateView(UpdateView):
