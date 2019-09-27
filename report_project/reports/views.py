@@ -14,31 +14,38 @@ class InformeDetailView(DetailView):
 
 from django.http import HttpResponseRedirect
 class InformeCreateView(CreateView): 
-    # form_class = InformeForm 
-    # template_name = 'reports/informe_form.html'
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     print (context)
-    #     print (self)
-    #     satimage_selected = self.fields['satimage_id']
-    #     satimage_selected_object = SatImage.objects.get(pk=satimage_selected) 
-    #     context['satimage_object'] = satimage_selected_object
+    form_class = InformeForm 
+    template_name = 'reports/informe_form.html'
+
+    # def get_context_data(self,  **kwargs):
+    #     context = super(InformeCreateView, self).get_context_data(**kwargs)
+    #     context['satimage_pk'] = request.POST.get('satimage1')
     #     return context 
+
+    # def form_valid(self, form):
+    # #     self.object = form.save(commit=False)
+    # #     self.object.user = self.fields['satimage1']
+    # #     self.object.save()
+    # #     return HttpResponseRedirect(self.get_success_url())
+    #     satimage_selected = request.POST['satimage1']  
+    #     # satimage_selected_object = SatImage.objects.get(pk=satimage_selected)     # informe.id
+    #     request.session['satimage1'] = satimage_selected 
+    #     return HttpResponseRedirect(self.get_success_url())
+    #     # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
 
     def post(self, request, *args, **kwargs):
         form = InformeForm(request.POST)
         if form.is_valid():
-            informe = form.save()
+            informe = form.save(commit=False)
+            satimage1_id = request.POST.get('satimage1')
+            informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
             informe.save()
-            satimage_selected = form.fields['satimage']
-            # satimage_selected_object = SatImage.objects.get(pk=satimage_selected)     # informe.id
-            return HttpResponseRedirect(reverse_lazy('informe_detail', '1', kwargs={'satimage': satimage_selected}))
-        return render(request, 'reports/informe_form.html', {'form': form})
+            return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
 
 
-    def get(self, request, *args, **kwargs):
-        context = {'form': InformeForm()}
-        return render(request, 'reports/informe_form.html', context)
+    # def get(self, request, *args, **kwargs):
+    #     context = {'form': InformeForm()}
+    #     return render(request, 'reports/informe_form.html', context)
 
 
 class InformeUpdateView(UpdateView):

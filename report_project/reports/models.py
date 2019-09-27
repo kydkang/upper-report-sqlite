@@ -12,7 +12,7 @@ class Event(models.Model):
 
 class Informe(models.Model):
     event       = models.ForeignKey(Event, null=True, on_delete=models.SET_NULL)
-    satimage    = models.ManyToManyField('SatImage')
+    satimage1    = models.ForeignKey('SatImage', null=True, on_delete=models.SET_NULL)
     informe_code= models.CharField(max_length=20)
     title       = models.CharField(max_length=200)
     fecha       = models.DateField()
