@@ -34,20 +34,20 @@ class SatImage(models.Model):
 
 class Area(models.Model):   
     event       = models.ForeignKey(Event, on_delete=models.CASCADE)
-    distrito    = models.OneToOneField('Distrito', on_delete=models.CASCADE)  
+    location    = models.ForeignKey('Location', on_delete=models.CASCADE)  
     superficie  = models.DecimalField(max_digits=8, decimal_places=2)
     hectarea    = models.DecimalField(max_digits=8, decimal_places=2)
     percentage  = models.DecimalField(max_digits=5, decimal_places=2)
     def __str__(self): 
         return str(self.id)
 
-class Distrito(models.Model):  
-    distritoID  = models.CharField(max_length=6, primary_key=True) 
+class Location(models.Model):  
+    locationID  = models.CharField(max_length=6, primary_key=True) 
     province    = models.CharField(max_length=50)
     canton      = models.CharField(max_length=50)
     parroquia   = models.CharField(max_length=50)
     def __str__(self): 
-        return self.distritoID
+        return self.locationID
 
 # class Provincia(models.Model): 
 #     name        = models.CharField(max_length=30)

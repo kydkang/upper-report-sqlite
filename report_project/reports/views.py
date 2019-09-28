@@ -12,13 +12,17 @@ class InformeDetailView(DetailView):
     model = Informe    ## Or, queryset = Informe.objects.all()
     template_name = 'reports/informe_detail.html' 
 
-    from django.core import serializers
-    def get_initial(self):
-        # initial = super(InformeCreateView, self).get_initial(**kwargs)
-        area_set = serializers.deserialize("json", response.session('area_set'))
-        return {
-            'area_set':area_set,
-        }
+    def setup(self, request, *args, **kwargs): 
+        super().setup(request, *args, **kwargs)
+        # self.areaset = request.session['areaset']
+        self.areas = [Area.objects.get(id=id) for id in request.session['export_areas']] 
+
+    def get_context_data(self, **kwargs):
+        context = super(InformeDetailView, self).get_context_data(**kwargs)
+        # areas = [Area.objects.get(id=id) for id in request.session['export_areas']] 
+        context['areaset'] = self.areas
+        return context
+
 
 from django.http import HttpResponseRedirect
 class InformeCreateView(CreateView): 
@@ -34,31 +38,13 @@ class InformeCreateView(CreateView):
             satimage1_id = request.POST.get('satimage1')
             informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
 
-            # gets the list of areas and set it in session 
-            from django.core import serializers
+            # gets the list of areas  (sending only the id list)
             event_id = request.POST.get('event')
-            area_set = Area.objects.filter(event=event_id) 
-            area_serialized = serializers.serialize('json', area_set)
-            request.session['area_set'] = area_serialized 
+            areas = [area.id for area in Area.objects.filter(event=event_id)] 
+            request.session['export_areas'] = areas 
 
             informe.save()
             return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
-            # return render(request,'reports/informe_detail', {'pk': informe.pk, 'dummy': 'dummy' } )
-
-        #  pass by session 
-        #     request.session['bar'] = 'FooBar'
-        #     return redirect('app:view')
-        # in template, use it by: 
-        # {{ request.session.bar }}
-
-
-    # def get_context_data(self, **kwargs):
-    #     context = super(InformeCreateView, self).get_context_data(**kwargs)
-    #     context['areaset'] = Area.objects.filter(event=event.pk)
-    #     return context
-
-
-
 
 
 class InformeUpdateView(UpdateView):
