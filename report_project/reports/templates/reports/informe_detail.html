@@ -5,7 +5,8 @@
         <p>{{ object.informe_code }}</p>
         <p>{{ object.event.event_code}}</p>
         <p>{{ object.fecha }}</p>
-        <p> <img src="{{ object.satimage1.image.url }}" alt=""> </p>
+        <p> <img src="{{ object.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </p>
+        <p> <img src="{{ object.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </p>
 
 
         {% for area in areaset %}

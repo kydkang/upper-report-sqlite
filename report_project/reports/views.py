@@ -2,6 +2,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.urls import reverse_lazy
 from .models import Informe, Area
 from .forms import InformeForm 
+from django.http import HttpResponseRedirect
 
 class InformeListView(ListView):
     model = Informe 
@@ -12,19 +13,20 @@ class InformeDetailView(DetailView):
     model = Informe    ## Or, queryset = Informe.objects.all()
     template_name = 'reports/informe_detail.html' 
 
+    # Initialize attributes shared by all view methods.
     def setup(self, request, *args, **kwargs): 
         super().setup(request, *args, **kwargs)
-        # self.areaset = request.session['areaset']
-        self.areas = [Area.objects.get(id=id) for id in request.session['export_areas']] 
+        # get the Area objects using object ids passed by session 
+        # this list will be sent to the template by the get_context_data() below
+        self.areas = [Area.objects.get(id=id) for id in request.session['affected_areas']] 
 
+    # Insert the area list  into the context dict.
     def get_context_data(self, **kwargs):
         context = super(InformeDetailView, self).get_context_data(**kwargs)
         # areas = [Area.objects.get(id=id) for id in request.session['export_areas']] 
         context['areaset'] = self.areas
         return context
 
-
-from django.http import HttpResponseRedirect
 class InformeCreateView(CreateView): 
     form_class = InformeForm 
     template_name = 'reports/informe_form.html'
@@ -34,14 +36,17 @@ class InformeCreateView(CreateView):
         if form.is_valid():
             informe = form.save(commit=False)
 
-            # gets the satimage1
+            # gets the satimage1 and assign it in the form, which will be passed to InformeDetailView template
             satimage1_id = request.POST.get('satimage1')
+            satimage2_id = request.POST.get('satimage2') 
             informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
+            informe.satimage2=SatImage.objects.get(pk=satimage2_id)
 
             # gets the list of areas  (sending only the id list)
             event_id = request.POST.get('event')
+            # get the Area object ids and save them in session
             areas = [area.id for area in Area.objects.filter(event=event_id)] 
-            request.session['export_areas'] = areas 
+            request.session['affected_areas'] = areas 
 
             informe.save()
             return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
