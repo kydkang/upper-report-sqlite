@@ -4,8 +4,14 @@ from .models import Informe, SatImage
 class InformeForm(forms.ModelForm):
     class Meta:
         model = Informe
-        fields = '__all__'
+        fields = ['event', 'satimage1', 'satimage2', 'informe_code', 'title', 'fecha']
+        ### also need change in settings.py to change the order to 25-Enero-2019
+        ###  USE_L10N = False    DATE_FORMAT = '%d %m %Y'  LANGUAGE_CODE = 'es-EC'
+        widgets = {
+            'fecha': forms.SelectDateWidget
+        }
         # template_name = 'reports/informe_form.html' 
+
 
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)

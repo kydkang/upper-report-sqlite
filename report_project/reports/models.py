@@ -28,7 +28,7 @@ class SatImage(models.Model):
     fuente      = models.CharField(max_length=50)
     banda       = models.CharField(max_length=50)
     fecha       = models.DateField()
-    antes       = models.BooleanField()
+    # antes       = models.BooleanField()
     image       = models.ImageField(upload_to='satimages')  
     def __str__(self): 
         return str(self.id)  
