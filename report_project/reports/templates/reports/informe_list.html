@@ -1,10 +1,29 @@
 {% extends 'base.html' %}
+
+{% block title %} 
+    Informe List
+{% endblock title %}
+
 {% block content %}
-    <h3>initial List</h3>
-    <ul>
-        {% for informe in object_list %}
-            <li><a href="{% url 'informe_detail' pk=informe.pk %}"> {{ informe.informe_code }} </a> </li>
-            <li>{{ informe.fecha }}</li>
-        {% endfor %}
-    </ul>
+    <div class ="row">
+        <h3>Informe List</h3>
+    </div>
+    <div class ="row">
+        <table class="table table-bordered">
+            <thead>
+                <th>Code</th>
+                <th>Event</th>
+                <th>Fecha</th>
+            </thead>
+            <tbody>
+                {% for informe in object_list %}
+                    <tr>
+                        <td><a href="{% url 'informe_detail' pk=informe.pk %}"> {{ informe.informe_code }} </a></td>
+                        <td>{{ informe.event }}</td>
+                        <td>{{ informe.fecha }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock content %}
