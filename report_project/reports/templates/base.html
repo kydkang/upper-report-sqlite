@@ -2,7 +2,11 @@
 <html>
 
 <head>
-    <title>SNGRE</title>
+    <title>
+            {% block title %} 
+                SNGRE
+            {% endblock title %}
+    </title>
     <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
 </head>
@@ -12,11 +16,9 @@
         <h3><a href="/"> SNGRE </a></h3>
     </header>
     <div class="container">
-
         <div class="">
                 <a href="{% url 'informe_create' %}">+ New Informe</a> 
         </div>              
-
         {% block content %}
         {% endblock content %}
     </div>

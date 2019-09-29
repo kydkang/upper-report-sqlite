@@ -69,4 +69,3 @@ def load_satimages(request):
     event_id = request.GET.get('event') 
     satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
     return render(request, 'reports/satimage_dropdown_list_options.html', {'satimages':satimages}) 
-

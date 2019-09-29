@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    {{ object.informe_code }}
+{% endblock title %}
+
 {% block content %}
     <div class="">
         <p>{{ object.informe_code }}</p>
@@ -8,12 +12,13 @@
         <p> <img src="{{ object.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </p>
         <p> <img src="{{ object.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </p>
 
-
         {% for area in areaset %}
-           {{ area }}
-           <p> {{ area.superficie }} </p>
+           <p> Area: {{ area }}  </p>
+           <p> Superficie: {{ area.superficie }} </p>
+           <p> Provincia:  {{ area.location.provincia }}</p>
+           <p> Canton: {{ area.location.canton }}</p>
+           <p> Parroquia: {{ area.location.parroquia }} </p>
         {% endfor %} 
-
     </div>
 
     <p> <a href="{% url 'informe_update' object.pk %}">+ Update Informe</a> </p>
