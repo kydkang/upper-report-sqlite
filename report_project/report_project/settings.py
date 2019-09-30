@@ -113,7 +113,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-### need to set USE_L10N to False and DATE_FORMAT to change the order to 25-Jan-2019  for SelectDateWidget
+### need to set USE_L10N to False and DATE_FORMAT to change 
+### the order to 25-Jan-2019  for SelectDateWidget
 USE_L10N = False
 DATE_FORMAT = 'd-m-Y'
 
