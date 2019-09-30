@@ -6,10 +6,13 @@
 
 {% block content %}
     <div class="">
-        <p>{{ object.informe_code }}</p>
-        <p>{{ object.event.dmeva_code}}</p>
-        <p>{{ object.fecha }}</p>
+        <p>Informe Code: {{ object.informe_code }}</p>
+        <p>Informe Title: {{ object.title }} </p>
+        <p>Informe Fecha: {{ object.fecha }}</p>
+        <p>Event DMEVA Code: {{ object.event.dmeva_code}}</p>
+        <p>Satelital Imagen 1: </p>
         <p> <img src="{{ object.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </p>
+        <p>Satelital Imagen 2: </p>
         <p> <img src="{{ object.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </p>
 
         {% for area in areaset %}
@@ -22,7 +25,7 @@
     </div>
 
     <p> <a href="{% url 'informe_update' object.pk %}">+ Update Informe</a> </p>
-    <p> <a href="{% url 'informe_delete' object.pk %}">+ Delete Blog Post</a> </p>
+    <p> <a href="{% url 'informe_delete' object.pk %}">+ Delete Informe</a> </p>
 
 {% endblock content %}
 

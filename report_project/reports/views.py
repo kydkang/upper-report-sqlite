@@ -1,8 +1,9 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Informe, Area
-from .forms import InformeForm 
+from .models import Informe, Area, SatImage
+from .forms import InformeForm, InformeUpdateForm
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
 class InformeListView(ListView):
     model = Informe 
@@ -50,20 +51,43 @@ class InformeCreateView(CreateView):
 
             informe.save()
             return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+        return render(request, 'reports/informe_form.html', {'form': form})
 
+    # def get(self, request, *args, **kwargs):
+    #     context = {'form': InformeForm()}
+    #     return render(request, 'reports/informe_form.html', context)
 
 class InformeUpdateView(UpdateView):
-    model = Informe
-    fields = ['informe_code', 'event', 'fecha']
-    template_name = 'reports/informe_update.html' 
+    model = Informe      ## for UpdateView, this line is needed. 
+    form_class = InformeUpdateForm 
+    template_name = 'reports/informe_update_form.html'
+
+    def post(self, request, *args, **kwargs):
+        object = Informe.objects.get(pk=self.kwargs['pk'])     ## get the existing object to update 
+        form = InformeForm(request.POST, instance=object)
+        if form.is_valid():
+            informe = form.save(commit=False)
+
+            # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
+            satimage1_id = request.POST.get('satimage1')
+            satimage2_id = request.POST.get('satimage2') 
+            informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
+            informe.satimage2=SatImage.objects.get(pk=satimage2_id)
+
+            # gets the list of areas  (sending only the id list)
+            event_id = request.POST.get('event')
+            # get the Area object ids and save them in session
+            areas = [area.id for area in Area.objects.filter(event=event_id)] 
+            request.session['affected_areas'] = areas 
+
+            informe.save()
+            return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+        return render(request, 'reports/informe_update_form.html', {'form': form})
 
 class InformeDeleteView(DeleteView):
     model = Informe
     template_name = 'reports/informe_delete.html'
     success_url = reverse_lazy('informe_list')
-
-from .models import SatImage 
-from django.shortcuts import render
 
 def load_satimages(request):
     event_id = request.GET.get('event') 
