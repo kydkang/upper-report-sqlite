@@ -22,7 +22,7 @@ class Informe(models.Model):
         return reverse('informe_detail', args=[str(self.id)])
 
 
-class SatImage(models.Model):
+class SatImage(models.Model): 
     event       = models.ForeignKey(Event, on_delete=models.CASCADE)
     fuente      = models.CharField(max_length=50)
     banda       = models.CharField(max_length=50)
