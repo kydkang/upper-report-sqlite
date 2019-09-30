@@ -36,7 +36,7 @@ class InformeCreateView(CreateView):
         if form.is_valid():
             informe = form.save(commit=False)
 
-            # gets the satimage1 and assign it in the form, which will be passed to InformeDetailView template
+            # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
             satimage1_id = request.POST.get('satimage1')
             satimage2_id = request.POST.get('satimage2') 
             informe.satimage1=SatImage.objects.get(pk=satimage1_id) 

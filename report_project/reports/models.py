@@ -4,7 +4,6 @@ from django.urls import reverse
 class Event(models.Model): 
     dmeva_code  = models.CharField(max_length=20) 
     dmeva_fecha = models.DateField()
-    grafico     = models.ImageField(upload_to='grafico/')
     mapa        = models.ImageField(upload_to='mapa/')
     # mapa        = models.PolygonField(upload_to='mapa/')
     def __str__(self): 
@@ -39,6 +38,7 @@ class Area(models.Model):
     superficie  = models.DecimalField(max_digits=8, decimal_places=2)
     hectarea    = models.DecimalField(max_digits=8, decimal_places=2)
     percentage  = models.DecimalField(max_digits=5, decimal_places=2)
+    grafico     = models.ImageField(upload_to='grafico/')
     def __str__(self): 
         return str(self.id)
 
