@@ -59,7 +59,7 @@ class InformeCreateView(CreateView):
 
 class InformeUpdateView(UpdateView):
     model = Informe      ## for UpdateView, this line is needed. 
-    form_class = InformeUpdateForm 
+    form_class = InformeUpdateForm
     template_name = 'reports/informe_update_form.html'
 
     def post(self, request, *args, **kwargs):
@@ -93,3 +93,19 @@ def load_satimages(request):
     event_id = request.GET.get('event') 
     satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
     return render(request, 'reports/satimage_dropdown_list_options.html', {'satimages':satimages}) 
+
+def load_satimages1(request):
+    event_id = request.GET.get('event') 
+    satimage1_id = request.GET.get('satimage1')
+    if satimage1_id: 
+        satimage1_id = int(satimage1_id)
+    satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+    return render(request, 'reports/satimage_dropdown_list_options1.html', {'satimages':satimages, 'satimage1_id':satimage1_id }) 
+
+def load_satimages2(request):
+    event_id = request.GET.get('event') 
+    satimage2_id = request.GET.get('satimage2')
+    if satimage2_id: 
+        satimage2_id = int(satimage2_id)
+    satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+    return render(request, 'reports/satimage_dropdown_list_options2.html', {'satimages':satimages, 'satimage2_id':satimage2_id }) 

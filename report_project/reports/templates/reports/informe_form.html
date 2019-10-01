@@ -12,6 +12,23 @@
     </form>
   
     <script>
+
+      $(document).ready(function () {  // always execute this function to update the dropdown // $ is a shortcut for jQuery
+        var url = $("#informeForm").attr("data-satimages-url");  // get the url of the `load_cities` view
+        var eventId = $("#id_event").val();  // get the selected event ID from the HTML input
+        $.ajax({                // initialize an AJAX request
+          url: url,              // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+          data: {
+            'event': eventId, // add the country id to the GET parameters  and send it to load_cities
+          },
+          success: function (data) {   // `data` is the return value of the `load_cities` view function
+            $("#id_satimage1").html(data);   // replace the contents of dropdown list 
+            $("#id_satimage2").html(data);   // the data that came from the server
+          }
+        });
+      });
+
+
       $("#id_event").change(function () {               // $ is a shortcut for jQuery
         var url = $("#informeForm").attr("data-satimages-url");  // get the url of the `load_cities` view
         var eventId = $(this).val();  // get the selected event ID from the HTML input

@@ -20,21 +20,15 @@ class InformeForm(forms.ModelForm):
             'title': 'Titulo',
             'fecha': 'Fecha',
         }
-        # help_texts = {
-        #     'name': _('Some useful help text.'),
-        # }
-        # error_messages = {  
-        #     'name': {
-        #         'max_length': _("This writer's name is too long."),
-        #     },
-        # }
-
+        # help_texts = {    'name': _('Some useful help text.'),      }
+        # error_messages = {       'name': {   'max_length': _("This writer's name is too long."),    },  }
 
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.fields['satimage'].widget.attrs['size']='40'
         self.fields['satimage1'].queryset=SatImage.objects.none()
         self.fields['satimage2'].queryset=SatImage.objects.none() 
+        print(self.data) 
 
         if 'event' in self.data:     ## handling ajax request 
             try:
@@ -69,6 +63,8 @@ class InformeUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['satimage1'].queryset = SatImage.objects.filter(event_id=self.instance.event.id).order_by('fecha')
         self.fields['satimage2'].queryset = SatImage.objects.filter(event__dmeva_code=self.instance.event.dmeva_code).order_by('fecha')
+
+
 
 
 

@@ -8,5 +8,6 @@ urlpatterns = [
     path('informe/<int:pk>/update/', views.InformeUpdateView.as_view(), name='informe_update'),
     path('informe/<int:pk>/delete/', views.InformeDeleteView.as_view(), name='informe_delete'), 
     path('ajax/load-satimages/', views.load_satimages, name='ajax_load_satimages'), 
-    
+    path('ajax/load-satimages1/', views.load_satimages1, name='ajax_load_satimages1'), 
+    path('ajax/load-satimages2/', views.load_satimages2, name='ajax_load_satimages2'), 
 ]

@@ -1,0 +1,13 @@
+<option value="">---------</option>
+{% for satimage in satimages %}
+
+    {% if satimage.pk == satimage1_id %}
+        <option value="{{ satimage.pk }}" selected="selected">{{ satimage.fuente }} {{ satimage.banda }}  {{ satimage.fecha }} </option>
+    {% else %}
+        <option value="{{ satimage.pk }}">{{ satimage.fuente }} {{ satimage.banda }}  {{ satimage.fecha }} </option>
+    {% endif %}
+
+{% endfor %}
+
+
+
