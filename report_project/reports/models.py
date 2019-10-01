@@ -30,7 +30,7 @@ class SatImage(models.Model):
     # antes       = models.BooleanField()
     image       = models.ImageField(upload_to='satimages', verbose_name='Imagen')  
     def __str__(self): 
-        return str(self.id)  
+        return str(self.event) + " " + str(self.fuente) + " " + str(self.banda)    
 
 class Area(models.Model):   
     event       = models.ForeignKey(Event, on_delete=models.CASCADE, verbose_name='Evento')

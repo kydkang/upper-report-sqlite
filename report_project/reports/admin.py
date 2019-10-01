@@ -19,3 +19,4 @@ class SatImageAdmin(admin.ModelAdmin):
     list_display = ['event', 'fuente', 'banda', 'fecha', 'image']
 admin.site.register(SatImage, SatImageAdmin)
 
+
