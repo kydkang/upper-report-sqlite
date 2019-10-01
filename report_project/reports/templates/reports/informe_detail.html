@@ -6,14 +6,14 @@
 
 {% block content %}
     <div class="">
-        <p>Informe Code: {{ object.informe_code }}</p>
-        <p>Informe Title: {{ object.title }} </p>
-        <p>Informe Fecha: {{ object.fecha }}</p>
-        <p>Event DMEVA Code: {{ object.event.dmeva_code}}</p>
+        <p>Informe Code: {{ informe.informe_code }}</p>
+        <p>Informe Title: {{ informe.title }} </p>
+        <p>Informe Fecha: {{ informe.fecha }}</p>
+        <p>Event DMEVA Code: {{ informe.event.dmeva_code}}</p>
         <p>Satelital Imagen 1: </p>
-        <p> <img src="{{ object.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </p>
+        <p> <img src="{{ informe.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </p>
         <p>Satelital Imagen 2: </p>
-        <p> <img src="{{ object.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </p>
+        <p> <img src="{{ informe.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </p>
 
         {% for area in areaset %}
            <p> Area: {{ area }}  </p>
