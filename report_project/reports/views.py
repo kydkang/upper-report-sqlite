@@ -14,19 +14,27 @@ class InformeDetailView(DetailView):
     model = Informe    ## Or, queryset = Informe.objects.all()
     template_name = 'reports/informe_detail.html' 
 
-    # Initialize attributes shared by all view methods.
-    def setup(self, request, *args, **kwargs): 
-        super().setup(request, *args, **kwargs)
-        # get the Area objects using object ids passed by session 
-        # this list will be sent to the template by the get_context_data() below
-        self.areas = [Area.objects.get(id=id) for id in request.session['affected_areas']] 
-
-    # Insert the area list  into the context dict.
     def get_context_data(self, **kwargs):
         context = super(InformeDetailView, self).get_context_data(**kwargs)
-        # areas = [Area.objects.get(id=id) for id in request.session['export_areas']] 
-        context['areaset'] = self.areas
+        informe_selected = Informe.objects.get(id=self.kwargs['pk'])
+        areaset = Area.objects.filter(event_id=informe_selected.event.id) 
+        context['areaset'] = areaset
         return context
+
+    # # Initialize attributes shared by all view methods.
+    # def setup(self, request, *args, **kwargs): 
+    #     super().setup(request, *args, **kwargs)
+    #     # get the Area objects using object ids passed by session 
+    #     # this list will be sent to the template by the get_context_data() below
+    #     if request.session._session:
+    #         self.areas = [Area.objects.get(id=id) for id in request.session['affected_areas']] 
+
+    # # Insert the area list  into the context dict.
+    # def get_context_data(self, **kwargs):
+    #     context = super(InformeDetailView, self).get_context_data(**kwargs)
+    #     if request.session._session:
+    #         context['areaset'] = self.areas
+    #     return context
 
 class InformeCreateView(CreateView): 
     form_class = InformeForm 
@@ -45,13 +53,14 @@ class InformeCreateView(CreateView):
 
             # gets the list of areas  (sending only the id list)
             event_id = request.POST.get('event')
+            areaset = Area.objects.filter(event=event_id) 
             # get the Area object ids and save them in session
-            areas = [area.id for area in Area.objects.filter(event=event_id)] 
-            request.session['affected_areas'] = areas 
-
+            # areas = [area.id for area in Area.objects.filter(event=event_id)] 
+            # request.session['affected_areas'] = areas
             informe.save()
-            return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
-        return render(request, 'reports/informe_form.html', {'form': form})
+            return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})
+            # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+        return render(request, 'reports/informe_form.html', {'form': form, })
 
     # def get(self, request, *args, **kwargs):
     #     context = {'form': InformeForm()}
@@ -76,12 +85,13 @@ class InformeUpdateView(UpdateView):
 
             # gets the list of areas  (sending only the id list)
             event_id = request.POST.get('event')
+            areaset = Area.objects.filter(event=event_id) 
             # get the Area object ids and save them in session
-            areas = [area.id for area in Area.objects.filter(event=event_id)] 
-            request.session['affected_areas'] = areas 
-
+            # areas = [area.id for area in Area.objects.filter(event=event_id)] 
+            # request.session['affected_areas'] = areas 
             informe.save()
-            return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+            return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})
+            # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
         return render(request, 'reports/informe_update_form.html', {'form': form})
 
 class InformeDeleteView(DeleteView):
