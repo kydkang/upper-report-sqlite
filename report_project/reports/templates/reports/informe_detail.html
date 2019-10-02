@@ -5,28 +5,62 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="">
-        <p>Informe Code: {{ informe.informe_code }}</p>
-        <p>Informe Title: {{ informe.title }} </p>
-        <p>Informe Fecha: {{ informe.fecha }}</p>
-        <p>Event DMEVA Code: {{ informe.event.dmeva_code}}</p>
-        <p>Satelital Imagen 1: </p>
-        <p> <img src="{{ informe.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </p>
-        <p>Satelital Imagen 2: </p>
-        <p> <img src="{{ informe.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </p>
-
-        {% for area in areaset %}
-           <p> Area: {{ area }}  </p>
-           <p> Superficie: {{ area.superficie }} </p>
-           <p> Provincia:  {{ area.location.provincia }}</p>
-           <p> Canton: {{ area.location.canton }}</p>
-           <p> Parroquia: {{ area.location.parroquia }} </p>
-        {% endfor %} 
+    <div class ="row">
+        <div class="col-sm-8 offset-sm-2">
+            <table class="table table-borderless   w-auto">
+                <tbody>
+                    <tr> <td>Informe Code </td> <td> {{ informe.informe_code }} </td> </tr>
+                    <tr> <td>Informe Title </td> <td> {{ informe.title }} </td> </tr>
+                    <tr> <td>Event DMEVA Code </td> <td> {{ informe.event.dmeva_code }} </td> </tr>
+                    <tr> <td>Satelital Imagen 1 </td> <td> Satelital Imagen 2 </td> </tr>
+                    <tr> <td><img src="{{ informe.satimage1.image.url }}" alt="SatImage1" width="200" height="100"> </td> 
+                        <td> <img src="{{ informe.satimage2.image.url }}" alt="SatImage2" width="200" height="100"> </td> </tr>
+                </tbody>
+            </table> 
+        </div>
     </div>
 
-    <p> <a href="{% url 'informe_update' informe.id %}">+ Update Informe</a> </p>
-    <p> <a href="{% url 'informe_delete' informe.id %}">+ Delete Informe</a> </p>
+    <div class ="row">
+      <div class="col-sm-8 offset-sm-2">
+        <table class="table table-sm table-bordered table-striped  w-auto">
+            <thead>
+                <th>Area Code</th>
+                <th>Provincia</th>
+                <th>Canton</th>
+                <th>Parroquia</th>
+                <th>Superficie</th>
+                <th>Hectarea</th>
+                <th>Percentage</th>
+            </thead>
+            <tbody>
+                {% for area in areaset %}
+                    <tr>
+                        <td>{{ area.location }} </td>
+                        <td>{{ area.location.province }}</td>
+                        <td>{{ area.location.canton }}</td>
+                        <td>{{ area.location.parroquia }}</td>
+                        <td>{{ area.superficie }}</td>
+                        <td>{{ area.hectarea }}</td>
+                        <td>{{ area.percentage }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+      </div>
+    </div> 
 
+    <div class ="row">
+        <div class="col-sm-8 offset-sm-2">
+            <table class="table table-borderless  w-auto">
+                <tbody>
+                    <tr>
+                        <td><a href="{% url 'informe_update' informe.id %}" class="btn btn-primary "> Update Informe </a> </td>
+                        <td><a href="{% url 'informe_delete' informe.id %}" class="btn btn-secondary "> Delete Informe </a> </td>
+                    </tr>
+                </tbody> 
+            </table> 
+        </div> 
+    </div>
 {% endblock content %}
 
 
