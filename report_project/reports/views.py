@@ -16,7 +16,7 @@ class InformeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(InformeDetailView, self).get_context_data(**kwargs)
-        informe_selected = Informe.objects.get(id=self.kwargs['pk'])
+        informe_selected = Informe.objects.get(id=self.kwargs['pk'])   # pk is from the url 
         areaset = Area.objects.filter(event_id=informe_selected.event.id) 
         context['areaset'] = areaset
         return context
@@ -24,7 +24,7 @@ class InformeDetailView(DetailView):
     # # Initialize attributes shared by all view methods.
     # def setup(self, request, *args, **kwargs): 
     #     super().setup(request, *args, **kwargs)
-    #     # get the Area objects using object ids passed by session 
+    #     # get the Area objects using object ids passed by SESSION
     #     # this list will be sent to the template by the get_context_data() below
     #     if request.session._session:
     #         self.areas = [Area.objects.get(id=id) for id in request.session['affected_areas']] 
@@ -40,27 +40,31 @@ class InformeCreateView(CreateView):
     form_class = InformeForm 
     template_name = 'reports/informe_form.html'
 
-    def post(self, request, *args, **kwargs):
-        form = InformeForm(request.POST)
-        if form.is_valid():
-            informe = form.save(commit=False)
+    # def post(self, request, *args, **kwargs):
+    #     form = InformeForm(request.POST)
+    #     if form.is_valid():
+    #         informe = form.save(commit=False)
 
-            # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
-            satimage1_id = request.POST.get('satimage1')
-            satimage2_id = request.POST.get('satimage2') 
-            informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
-            informe.satimage2=SatImage.objects.get(pk=satimage2_id)
+    #         # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
+    #         # not needed because the CreateView automatically handle this.... 
+    #         # satimage1_id = request.POST.get('satimage1')
+    #         # satimage2_id = request.POST.get('satimage2') 
+    #         # informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
+    #         # informe.satimage2=SatImage.objects.get(pk=satimage2_id)
 
-            # gets the list of areas  (sending only the id list)
-            event_id = request.POST.get('event')
-            areaset = Area.objects.filter(event=event_id) 
-            # get the Area object ids and save them in session
-            # areas = [area.id for area in Area.objects.filter(event=event_id)] 
-            # request.session['affected_areas'] = areas
-            informe.save()
-            return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})
-            # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
-        return render(request, 'reports/informe_form.html', {'form': form, })
+    #         # gets the list of areas  (sending only the id list) << not needed because get_context_data in DetailView handles this
+    #         event_id = request.POST.get('event')
+    #         areaset = Area.objects.filter(event=event_id) 
+    #         informe.save() 
+    #         return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})   
+    #  
+    #         Or, you can use SESSION... use session only for direct and temporary delivery of value... 
+    #         get the Area object ids and save them in SESSION,  then get them in InformeDetailView
+    #         areas = [area.id for area in Area.objects.filter(event=event_id)] 
+    #         request.session['affected_areas'] = areas
+    #         informe.save()
+    #         return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+    #     return render(request, 'reports/informe_form.html', {'form': form, })
 
     # def get(self, request, *args, **kwargs):
     #     context = {'form': InformeForm()}
@@ -71,28 +75,28 @@ class InformeUpdateView(UpdateView):
     form_class = InformeUpdateForm
     template_name = 'reports/informe_update_form.html'
 
-    def post(self, request, *args, **kwargs):
-        object = Informe.objects.get(pk=self.kwargs['pk'])     ## get the existing object to update 
-        form = InformeForm(request.POST, instance=object)
-        if form.is_valid():
-            informe = form.save(commit=False)
+    # def post(self, request, *args, **kwargs):
+    #     object = Informe.objects.get(pk=self.kwargs['pk'])     ## get the existing object to update 
+    #     form = InformeForm(request.POST, instance=object)
+    #     if form.is_valid():
+    #         informe = form.save(commit=False)
 
-            # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
-            satimage1_id = request.POST.get('satimage1')
-            satimage2_id = request.POST.get('satimage2') 
-            informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
-            informe.satimage2=SatImage.objects.get(pk=satimage2_id)
+    #         # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
+    #         # satimage1_id = request.POST.get('satimage1')
+    #         # satimage2_id = request.POST.get('satimage2') 
+    #         # informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
+    #         # informe.satimage2=SatImage.objects.get(pk=satimage2_id)
 
-            # gets the list of areas  (sending only the id list)
-            event_id = request.POST.get('event')
-            areaset = Area.objects.filter(event=event_id) 
-            # get the Area object ids and save them in session
-            # areas = [area.id for area in Area.objects.filter(event=event_id)] 
-            # request.session['affected_areas'] = areas 
-            informe.save()
-            return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})
-            # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
-        return render(request, 'reports/informe_update_form.html', {'form': form})
+    #         # gets the list of areas  (sending only the id list)
+    #         event_id = request.POST.get('event')
+    #         areaset = Area.objects.filter(event=event_id) 
+    #         # get the Area object ids and save them in session,  then get them in InformeDetailView
+    #         # areas = [area.id for area in Area.objects.filter(event=event_id)] 
+    #         # request.session['affected_areas'] = areas 
+    #         informe.save()
+    #         return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})
+    #         # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
+    #     return render(request, 'reports/informe_update_form.html', {'form': form})
 
 class InformeDeleteView(DeleteView):
     model = Informe

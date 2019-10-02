@@ -25,10 +25,8 @@ class InformeForm(forms.ModelForm):
 
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields['satimage'].widget.attrs['size']='40'
         self.fields['satimage1'].queryset=SatImage.objects.none()
         self.fields['satimage2'].queryset=SatImage.objects.none() 
-        print(self.data) 
 
         if 'event' in self.data:     ## handling ajax request 
             try:
@@ -61,8 +59,19 @@ class InformeUpdateForm(forms.ModelForm):
 
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['satimage1'].queryset = SatImage.objects.filter(event_id=self.instance.event.id).order_by('fecha')
-        self.fields['satimage2'].queryset = SatImage.objects.filter(event__dmeva_code=self.instance.event.dmeva_code).order_by('fecha')
+        self.fields['satimage1'].queryset=SatImage.objects.none()
+        self.fields['satimage2'].queryset=SatImage.objects.none() 
+        print(self.data) 
+        if 'event' in self.data:    ### if there are data for each field then... 
+            try:
+                event_id = int(self.data.get('event'))
+                self.fields['satimage1'].queryset = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+                self.fields['satimage2'].queryset = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:    # if there is an form intance (to update), but the self.data is empty
+            self.fields['satimage1'].queryset = SatImage.objects.filter(event_id=self.instance.event.id).order_by('fecha')
+            self.fields['satimage2'].queryset = SatImage.objects.filter(event__dmeva_code=self.instance.event.dmeva_code).order_by('fecha')
 
 
 
