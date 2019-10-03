@@ -17,7 +17,7 @@ class InformeDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(InformeDetailView, self).get_context_data(**kwargs)
         informe_selected = Informe.objects.get(id=self.kwargs['pk'])   # pk is from the url 
-        areaset = Area.objects.filter(event_id=informe_selected.event.id) 
+        areaset = Area.objects.filter(event__id=informe_selected.event.id) 
         context['areaset'] = areaset
         return context
 
@@ -58,7 +58,7 @@ class InformeCreateView(CreateView):
     #         informe.save() 
     #         return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})   
     #  
-    #         Or, you can use SESSION... use session only for direct and temporary delivery of value... 
+    #         Or, you can use SESSION...no good... use session only for direct and temporary delivery of value... 
     #         get the Area object ids and save them in SESSION,  then get them in InformeDetailView
     #         areas = [area.id for area in Area.objects.filter(event=event_id)] 
     #         request.session['affected_areas'] = areas
@@ -81,7 +81,8 @@ class InformeUpdateView(UpdateView):
     #     if form.is_valid():
     #         informe = form.save(commit=False)
 
-    #         # gets the satimage id and assign the satimage object in the form, which will be passed to InformeDetailView template
+    #         # gets the satimage id and assign the satimage object in the form, 
+    #         # which will be passed to InformeDetailView template  << not needed, as UpdateView is handling this already.
     #         # satimage1_id = request.POST.get('satimage1')
     #         # satimage2_id = request.POST.get('satimage2') 
     #         # informe.satimage1=SatImage.objects.get(pk=satimage1_id) 
@@ -89,12 +90,15 @@ class InformeUpdateView(UpdateView):
 
     #         # gets the list of areas  (sending only the id list)
     #         event_id = request.POST.get('event')
-    #         areaset = Area.objects.filter(event=event_id) 
-    #         # get the Area object ids and save them in session,  then get them in InformeDetailView
-    #         # areas = [area.id for area in Area.objects.filter(event=event_id)] 
-    #         # request.session['affected_areas'] = areas 
+    #         areaset = Area.objects.filter(event=event_id)    # areas of the event 
     #         informe.save()
     #         return render(request, 'reports/informe_detail.html', {'form': form, 'areaset':areaset, 'informe':informe})
+    #         # get the Area object ids and save them in session,  then get them in InformeDetailView
+
+    #         # Or , use SESSION...not recommended... use session only for direct and temporary delivery of value... 
+    #         # areas = [area.id for area in Area.objects.filter(event=event_id)] 
+    #         # request.session['affected_areas'] = areas 
+    #         # informe.save()
     #         # return HttpResponseRedirect(reverse_lazy('informe_detail', kwargs={'pk': informe.pk}))
     #     return render(request, 'reports/informe_update_form.html', {'form': form})
 
@@ -105,7 +109,7 @@ class InformeDeleteView(DeleteView):
 
 def load_satimages(request):
     event_id = request.GET.get('event') 
-    satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+    satimages = SatImage.objects.filter(event__id=event_id).order_by('fecha')
     return render(request, 'reports/satimage_dropdown_list_options.html', {'satimages':satimages}) 
 
 def load_satimages1(request):
@@ -113,7 +117,7 @@ def load_satimages1(request):
     satimage1_id = request.GET.get('satimage1')
     if satimage1_id: 
         satimage1_id = int(satimage1_id)
-    satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+    satimages = SatImage.objects.filter(event__id=event_id).order_by('fecha')
     return render(request, 'reports/satimage_dropdown_list_options1.html', {'satimages':satimages, 'satimage1_id':satimage1_id }) 
 
 def load_satimages2(request):
@@ -121,5 +125,5 @@ def load_satimages2(request):
     satimage2_id = request.GET.get('satimage2')
     if satimage2_id: 
         satimage2_id = int(satimage2_id)
-    satimages = SatImage.objects.filter(event_id=event_id).order_by('fecha')
+    satimages = SatImage.objects.filter(event__id=event_id).order_by('fecha')
     return render(request, 'reports/satimage_dropdown_list_options2.html', {'satimages':satimages, 'satimage2_id':satimage2_id }) 

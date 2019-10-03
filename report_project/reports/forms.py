@@ -9,9 +9,8 @@ class InformeForm(forms.ModelForm):
         ### also need change as follows in settings.py to change the order to 25-Enero-2019
         ###  USE_L10N = False    DATE_FORMAT = 'd-m-Y'  LANGUAGE_CODE = 'es-EC'
         widgets = {
-            'fecha': forms.SelectDateWidget
+            'fecha': forms.SelectDateWidget(attrs={'class': 'informe-fecha-inline-select'})     
         }
-
         labels = {
             'event': 'Evento',
             'satimage1': 'Imagen Satelital 1', 
@@ -45,7 +44,7 @@ class InformeUpdateForm(forms.ModelForm):
         model = Informe
         fields = ['informe_code', 'title', 'fecha', 'event', 'satimage1', 'satimage2', 'id']
         widgets = {
-            'fecha': forms.SelectDateWidget
+            'fecha': forms.SelectDateWidget(attrs={'class': 'informe-fecha-inline-select'})     
         }
 
         labels = {

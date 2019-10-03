@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
     <h2>New Informe</h2>
 
     <form method="post" id="informeForm" data-satimages-url="{% url 'ajax_load_satimages' %}" novalidate>
       {% csrf_token %}
-      <table>
-        {{ form.as_table }}
-      </table>
+
+        {{ form|crispy }}
+
       <button type="submit" >Save</button>
     </form>
   

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 
     <h2>Update Informe</h2>
@@ -8,9 +9,7 @@
         data-satimages-url1="{% url 'ajax_load_satimages1' %}"
         data-satimages-url2="{% url 'ajax_load_satimages2' %}">
       {% csrf_token %}
-      <table>
-        {{ form.as_table }}
-      </table>
+      {{ form|crispy }}
       <button type="submit" >Save</button>
     </form>
   
