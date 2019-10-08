@@ -22,18 +22,18 @@ class InformeForm(forms.ModelForm):
         # help_texts = {    'name': _('Some useful help text.'),      }
         # error_messages = {       'name': {   'max_length': _("This writer's name is too long."),    },  }
 
-    def __init__(self,*args, **kwargs):
+    def __init__(self,*args, **kwargs):       ## this function is called after the form is created
         super().__init__(*args, **kwargs)
         self.fields['satimage1'].queryset=SatImage.objects.none()
         self.fields['satimage2'].queryset=SatImage.objects.none() 
 
-        if 'event' in self.data:     ## handling ajax request 
+        if 'event' in self.data:     ##  If there is form POST data  
             try:
                 event_id = int(self.data.get('event'))
                 self.fields['satimage1'].queryset = SatImage.objects.filter(event_id=event_id).order_by('fecha')
                 self.fields['satimage2'].queryset = SatImage.objects.filter(event_id=event_id).order_by('fecha')
             except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
+                pass  # invalid input from the client; ignore and fallback to empty Satimage queryset
         elif self.instance.pk:    # if there is an form intance (to update).  satimage_set is the reverse set for SatImage
             self.fields['satimage1'].queryset = self.instance.event.satimage_set.order_by('fecha')
             self.fields['satimage2'].queryset = self.instance.event.satimage_set.order_by('fecha') 
